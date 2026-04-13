@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.ZekrApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">#FFD700</item>
+        <item name="colorPrimaryVariant">#1a1a2e</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="android:windowBackground">#1a1a2e</item>
+    </style>
+</resources>
