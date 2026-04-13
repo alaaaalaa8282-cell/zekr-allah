@@ -1,0 +1,55 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.2'
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Grant execute permission and validate wrapper
+        run: |
+          chmod +x gradlew
+          gradle wrapper --gradle-version 8.2
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZekrApp-APK
+          path: app/build/outputs/apk/release/*.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: "تطبيق محمد عبد العظيم لذكر الله - إصدار ${{ github.run_number }}"
+          body: "تطبيق الأذكار الصوتية - يعمل في الخلفية ويرسل إشعارات صوتية بالأذكار"
+          files: app/build/outputs/apk/release/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
