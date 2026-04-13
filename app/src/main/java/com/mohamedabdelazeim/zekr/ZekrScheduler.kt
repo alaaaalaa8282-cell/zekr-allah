@@ -11,7 +11,7 @@ object ZekrScheduler {
     fun schedule(context: Context) {
         val minutes = ZekrPrefs.getIntervalMinutes(context).toLong()
 
-        val request = PeriodicWorkRequestBuilder<ZekrWorker>(minutes, TimeUnit.MINUTES)
+          PeriodicWorkRequestBuilder<ZekrWorker>(maxOf(minutes, 15L), TimeUnit.MINUTES)
             .setInitialDelay(minutes, TimeUnit.MINUTES)
             .build()
 
